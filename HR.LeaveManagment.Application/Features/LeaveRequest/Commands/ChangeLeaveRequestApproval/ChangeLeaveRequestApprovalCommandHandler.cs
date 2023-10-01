@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using HR.LeaveManagement.Application.Contracts.Email;
 using HR.LeaveManagement.Application.Exceptions;
+using HR.LeaveManagement.Application.Models.Email;
 using HR.LeaveManagment.Application.Contracts.Persistence;
 using MediatR;
 
@@ -8,16 +10,16 @@ namespace HR.LeaveManagement.Application.Features.LeaveRequest.Commands.ChangeLe
     public class ChangeLeaveRequestApprovalCommandHandler : IRequestHandler<ChangeLeaveRequestApprovalCommand, Unit>
     {
         private readonly IMapper _mapper;
+        private readonly IEmailSender _emailSender;
         private readonly ILeaveRequestRepository _leaveRequestRepository;
-        private readonly ILeaveAllocationRepository _leaveAllocationRepository;
         private readonly ILeaveTypeRepository _leaveTypeRepository;
 
-        public ChangeLeaveRequestApprovalCommandHandler(IMapper mapper, ILeaveRequestRepository leaveRequestRepository,
-            ILeaveAllocationRepository leaveAllocationRepository, ILeaveTypeRepository leaveTypeRepository)
+        public ChangeLeaveRequestApprovalCommandHandler(IMapper mapper, IEmailSender emailSender,
+            ILeaveRequestRepository leaveRequestRepository, ILeaveTypeRepository leaveTypeRepository)
         {
             this._mapper = mapper;
+            this._emailSender = emailSender;
             this._leaveRequestRepository = leaveRequestRepository;
-            this._leaveAllocationRepository = leaveAllocationRepository;
             this._leaveTypeRepository = leaveTypeRepository;
         }
 
@@ -31,14 +33,15 @@ namespace HR.LeaveManagement.Application.Features.LeaveRequest.Commands.ChangeLe
             leaveRequest.Approved = request.Approved;
             await _leaveRequestRepository.UpdateAsync(leaveRequest);
 
-            if (request.Approved)
+            var email = new EmailMessage
             {
-                int daysRequest = (int)(leaveRequest.EndDate - leaveRequest.StartDate).TotalDays;
-                var allocation = await _leaveAllocationRepository.GetUserAllocations(leaveRequest.RequestingEmployeeId, leaveRequest.LeaveTypeId);
-                allocation.NumberOfDays -= daysRequest;
+                To = string.Empty,
+                Body = $"The approval status for your leave reques for{leaveRequest.StartDate:D} to {leaveRequest.EndDate:D}" +
+                      $"has been updated.",
+                Subject = "Leave Request Approval Status Updated"
+            };
 
-                await _leaveAllocationRepository.UpdateAsync(allocation);
-            }
+            await _emailSender.SendEmail(email);
 
             return Unit.Value;
         }

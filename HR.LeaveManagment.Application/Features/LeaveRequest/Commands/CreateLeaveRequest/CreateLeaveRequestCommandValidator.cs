@@ -11,6 +11,8 @@ namespace HR.LeaveManagement.Application.Features.LeaveRequest.Commands.CreateLe
         public CreateLeaveRequestCommandValidator(ILeaveTypeRepository leaveTypeRepository)
         {
             this._leaveTypeRepository = leaveTypeRepository;
+
+            Include(new BaseLeaveRequestValidator(_leaveTypeRepository));
         }
     }
 }

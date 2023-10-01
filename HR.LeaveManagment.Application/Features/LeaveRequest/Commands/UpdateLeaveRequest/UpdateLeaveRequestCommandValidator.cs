@@ -14,6 +14,8 @@ namespace HR.LeaveManagement.Application.Features.LeaveRequest.Commands.UpdateLe
             this._leaveTypeRepository = leaveTypeRepository;
             this._leaveRequestRepository = leaveRequestRepository;
 
+            Include(new BaseLeaveRequestValidator(_leaveTypeRepository));
+
             RuleFor(p => p.Id)
                 .NotNull()
                 .MustAsync(LeaveRequestMustExist).WithMessage("{PropertName} must be present");

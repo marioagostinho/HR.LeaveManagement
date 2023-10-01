@@ -13,7 +13,7 @@ namespace HR.LeaveManagement.Application.Features.LeaveAllocation.Commands.Creat
 
             RuleFor(p => p.LeaveTypeId)
                 .GreaterThan(0)
-                .MustAsync(LeaveTypeMustExist)
+                .MustAsync(LeaveTypeMustExist) 
                 .WithMessage("{PropertyName} doest not exist.");
         }
 

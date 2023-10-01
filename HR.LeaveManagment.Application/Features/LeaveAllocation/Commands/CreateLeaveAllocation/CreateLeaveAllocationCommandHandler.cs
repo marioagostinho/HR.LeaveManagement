@@ -28,8 +28,9 @@ namespace HR.LeaveManagement.Application.Features.LeaveAllocation.Commands.Creat
             if (validatonResult.IsValid == false)
                 throw new BadRequestException("Invalid Leave Allocation Request", validatonResult);
 
-            var allocations = new List<HRLeaveManagementDomain.LeaveAllocation>();
+            var leaveType = await _leaveTypeRepository.GetByIdAsync(request.LeaveTypeId);
 
+            var allocations = new List<HRLeaveManagementDomain.LeaveAllocation>();
             await _leaveAllocationRepository.AddAllocations(allocations);
 
             return Unit.Value;
