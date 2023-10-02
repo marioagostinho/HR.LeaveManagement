@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HR.LeaveManagement.Application.Exceptions;
+using HR.LeaveManagement.Application.Logging;
 using HR.LeaveManagment.Application.Contracts.Persistence;
 using MediatR;
 
