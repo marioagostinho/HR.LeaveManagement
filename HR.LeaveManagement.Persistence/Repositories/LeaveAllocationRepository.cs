@@ -1,6 +1,6 @@
-﻿using HR.LeaveManagement.Persistence.DatabaseContext;
-using HR.LeaveManagment.Application.Contracts.Persistence;
-using HRLeaveManagementDomain;
+﻿using HR.LeaveManagement.Application.Contracts.Persistence;
+using HR.LeaveManagement.Domain;
+using HR.LeaveManagement.Persistence.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace HR.LeaveManagement.Persistence.Repositories
@@ -19,42 +19,40 @@ namespace HR.LeaveManagement.Persistence.Repositories
 
         public async Task<bool> AllocationExists(string userId, int leaveTypeId, int period)
         {
-            return await _context.LeaveAllocations
-                .AnyAsync(p => p.EmployeeId == userId && p.LeaveTypeId == leaveTypeId && p.Period == period);
+            return await _context.LeaveAllocations.AnyAsync(q => q.EmployeeId == userId
+                                        && q.LeaveTypeId == leaveTypeId
+                                        && q.Period == period);
         }
 
         public async Task<List<LeaveAllocation>> GetLeaveAllocationsWithDetails()
         {
             var leaveAllocations = await _context.LeaveAllocations
-                .Include(p => p.LeaveType)
-                .ToListAsync();
-
+               .Include(q => q.LeaveType)
+               .ToListAsync();
             return leaveAllocations;
         }
 
         public async Task<List<LeaveAllocation>> GetLeaveAllocationsWithDetails(string userId)
         {
-            var leaveAllocations = await _context.LeaveAllocations
-                .Where(p => p.EmployeeId == userId)
-                .Include(p => p.LeaveType)
-                .ToListAsync();
-
+            var leaveAllocations = await _context.LeaveAllocations.Where(q => q.EmployeeId == userId)
+               .Include(q => q.LeaveType)
+               .ToListAsync();
             return leaveAllocations;
         }
 
         public async Task<LeaveAllocation> GetLeaveAllocationWithDetails(int id)
         {
             var leaveAllocation = await _context.LeaveAllocations
-                .Include(p => p.LeaveType)
-                .SingleOrDefaultAsync();
+                .Include(q => q.LeaveType)
+                .FirstOrDefaultAsync(q => q.Id == id);
 
             return leaveAllocation;
         }
 
         public async Task<LeaveAllocation> GetUserAllocations(string userId, int leaveTypeId)
         {
-            return await _context.LeaveAllocations
-                .FirstOrDefaultAsync(p => p.EmployeeId == userId && p.LeaveTypeId == leaveTypeId);
+            return await _context.LeaveAllocations.FirstOrDefaultAsync(q => q.EmployeeId == userId
+                                        && q.LeaveTypeId == leaveTypeId);
         }
     }
 }

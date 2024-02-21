@@ -1,5 +1,5 @@
-﻿using HR.LeaveManagment.Application.Contracts.Persistence;
-using HRLeaveManagementDomain;
+﻿using HR.LeaveManagement.Application.Contracts.Persistence;
+using HR.LeaveManagement.Domain;
 using Moq;
 
 namespace HR.LeaveManagement.Application.UnitTests.Mocks
@@ -37,8 +37,13 @@ namespace HR.LeaveManagement.Application.UnitTests.Mocks
             mockRepo.Setup(r => r.CreateAsync(It.IsAny<LeaveType>()))
                 .Returns((LeaveType leaveType) =>
                 {
-                    leaveTypes.Add(leaveType); 
+                    leaveTypes.Add(leaveType);
                     return Task.CompletedTask;
+                });
+            
+            mockRepo.Setup(r => r.IsLeaveTypeUnique(It.IsAny<string>()))
+                .ReturnsAsync((string name) => { 
+                    return !leaveTypes.Any(q => q.Name == name);
                 });
 
             return mockRepo;

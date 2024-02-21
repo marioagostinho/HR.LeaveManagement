@@ -17,18 +17,21 @@ namespace HR.LeaveManagement.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("HRLeaveManagementDomain.LeaveAllocation", b =>
+            modelBuilder.Entity("HR.LeaveManagement.Domain.LeaveAllocation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
@@ -43,6 +46,9 @@ namespace HR.LeaveManagement.Persistence.Migrations
                     b.Property<int>("LeaveTypeId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("NumberOfDays")
                         .HasColumnType("int");
 
@@ -56,7 +62,7 @@ namespace HR.LeaveManagement.Persistence.Migrations
                     b.ToTable("LeaveAllocations");
                 });
 
-            modelBuilder.Entity("HRLeaveManagementDomain.LeaveRequest", b =>
+            modelBuilder.Entity("HR.LeaveManagement.Domain.LeaveRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -67,8 +73,11 @@ namespace HR.LeaveManagement.Persistence.Migrations
                     b.Property<bool?>("Approved")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Cancelled")
+                    b.Property<bool>("Cancelled")
                         .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
@@ -84,6 +93,9 @@ namespace HR.LeaveManagement.Persistence.Migrations
 
                     b.Property<int>("LeaveTypeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RequestComments")
                         .HasColumnType("nvarchar(max)");
@@ -102,13 +114,16 @@ namespace HR.LeaveManagement.Persistence.Migrations
                     b.ToTable("LeaveRequests");
                 });
 
-            modelBuilder.Entity("HRLeaveManagementDomain.LeaveType", b =>
+            modelBuilder.Entity("HR.LeaveManagement.Domain.LeaveType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
@@ -118,6 +133,9 @@ namespace HR.LeaveManagement.Persistence.Migrations
 
                     b.Property<int>("DefaultDays")
                         .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -132,16 +150,16 @@ namespace HR.LeaveManagement.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2023, 9, 29, 16, 57, 37, 479, DateTimeKind.Local).AddTicks(5104),
-                            DateModified = new DateTime(2023, 9, 29, 16, 57, 37, 479, DateTimeKind.Local).AddTicks(5116),
+                            DateCreated = new DateTime(2023, 1, 18, 8, 17, 10, 116, DateTimeKind.Local).AddTicks(7420),
+                            DateModified = new DateTime(2023, 1, 18, 8, 17, 10, 116, DateTimeKind.Local).AddTicks(7439),
                             DefaultDays = 10,
                             Name = "Vacation"
                         });
                 });
 
-            modelBuilder.Entity("HRLeaveManagementDomain.LeaveAllocation", b =>
+            modelBuilder.Entity("HR.LeaveManagement.Domain.LeaveAllocation", b =>
                 {
-                    b.HasOne("HRLeaveManagementDomain.LeaveType", "LeaveType")
+                    b.HasOne("HR.LeaveManagement.Domain.LeaveType", "LeaveType")
                         .WithMany()
                         .HasForeignKey("LeaveTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -150,9 +168,9 @@ namespace HR.LeaveManagement.Persistence.Migrations
                     b.Navigation("LeaveType");
                 });
 
-            modelBuilder.Entity("HRLeaveManagementDomain.LeaveRequest", b =>
+            modelBuilder.Entity("HR.LeaveManagement.Domain.LeaveRequest", b =>
                 {
-                    b.HasOne("HRLeaveManagementDomain.LeaveType", "LeaveType")
+                    b.HasOne("HR.LeaveManagement.Domain.LeaveType", "LeaveType")
                         .WithMany()
                         .HasForeignKey("LeaveTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
