@@ -10,7 +10,7 @@
 
 <br />
 
-This small project with the goal of learn **clean architecture** .
+This small project with the goal of learn and implement **SOLID principles** with **clean architecture** .
 
 <br />
 
