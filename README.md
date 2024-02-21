@@ -1,6 +1,6 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
-# FrontEnd Task
+# HR Leave Management
 
 <br />
 
@@ -17,8 +17,13 @@ This small project with the goal of learn **clean architecture** .
 ### Built With
 
 * .NET 6
-* MediatR, AutoMapper, Fluent API and Fluent Validation
-* xUni, Moq and Shouldly
+* MediatR
+* AutoMapper
+* Fluent API
+* Fluent Validation
+* xUni
+* Moq
+* Shouldly
 * Blazor
 
 <!-- VARS -->
